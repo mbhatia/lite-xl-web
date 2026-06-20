@@ -324,7 +324,7 @@ static int open_module(lua_State *L) {
 
   lua_newtable(L);
   luaL_setfuncs(L, module_methods, 0);
-  lua_pushliteral(L, "0.1.0");
+  lua_pushliteral(L, "0.1.2");
   lua_setfield(L, -2, "version");
   lua_pushboolean(L, 1);
   lua_setfield(L, -2, "supported");
