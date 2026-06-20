@@ -25,10 +25,28 @@ jobs:
         include:
           - lpm_arch: aarch64-darwin
             runner: macos-15
+            os: macos
             machine_arch: arm64
+            file_arch_pattern: arm64
+            module_suffix: lib
           - lpm_arch: x86_64-darwin
             runner: macos-15-intel
+            os: macos
             machine_arch: x86_64
+            file_arch_pattern: x86_64
+            module_suffix: lib
+          - lpm_arch: x86_64-linux
+            runner: ubuntu-24.04
+            os: linux
+            machine_arch: x86_64
+            file_arch_pattern: x86-64
+            module_suffix: so
+          - lpm_arch: aarch64-linux
+            runner: ubuntu-24.04-arm
+            os: linux
+            machine_arch: aarch64
+            file_arch_pattern: aarch64
+            module_suffix: so
 
     steps:
       - name: Check out lite-xl-web
@@ -45,11 +63,20 @@ jobs:
         run: |
           set -euo pipefail
           test "$(uname -m)" = "${{ matrix.machine_arch }}"
-          xcode-select --print-path
+          if [ "${{ matrix.os }}" = "macos" ]; then
+            xcode-select --print-path
+          fi
           test -f "lite-xl/resources/include/lite_xl_plugin_api.h"
 
-      - name: Install build tools
+      - name: Install macOS build tools
+        if: matrix.os == 'macos'
         run: brew install cmake ninja
+
+      - name: Install Linux build tools
+        if: matrix.os == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build
 
       - name: Configure
         run: >-
@@ -68,11 +95,16 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p dist
-          asset="web_lxl.${{ matrix.lpm_arch }}.lib"
-          cp "libraries/web_lxl/init.lib" "dist/${asset}"
+          asset="web_lxl.${{ matrix.lpm_arch }}.${{ matrix.module_suffix }}"
+          cp "libraries/web_lxl/init.${{ matrix.module_suffix }}" "dist/${asset}"
           file "dist/${asset}"
-          lipo -archs "dist/${asset}" | grep -qw "${{ matrix.machine_arch }}"
-          shasum -a 256 "dist/${asset}" | tee "dist/${asset}.sha256"
+          if [ "${{ matrix.os }}" = "macos" ]; then
+            lipo -archs "dist/${asset}" | grep -qw "${{ matrix.machine_arch }}"
+            shasum -a 256 "dist/${asset}" | tee "dist/${asset}.sha256"
+          else
+            file "dist/${asset}" | grep -qi "${{ matrix.file_arch_pattern }}"
+            sha256sum "dist/${asset}" | tee "dist/${asset}.sha256"
+          fi
           {
             echo "### ${{ matrix.lpm_arch }} release asset"
             echo
