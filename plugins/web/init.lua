@@ -83,6 +83,8 @@ function WebView:new(target, options)
   self.status = { url = self.url, title = self.title, loading = false }
   self.error = browser_error()
   self.browser = nil
+  self.native_focused = false
+  self.core_active = false
 
   if not self.error then
     local ok_new, browser_or_error = pcall(native.new, {
@@ -102,7 +104,22 @@ function WebView:get_name()
   return self.title or config.plugins.web.title
 end
 
+function WebView:focus()
+  if self.browser and self.browser.focus then
+    self.browser:focus()
+    self.native_focused = true
+  end
+end
+
+function WebView:blur()
+  if self.browser and self.browser.blur then
+    pcall(self.browser.blur, self.browser)
+  end
+  self.native_focused = false
+end
+
 function WebView:close()
+  self:blur()
   if self.browser then
     self.browser:close()
     self.browser = nil
@@ -126,6 +143,12 @@ function WebView:update()
   if not self.browser then return end
 
   local node = core.root_view.root_node:get_node_for_view(self)
+  local is_core_active = core.active_view == self
+  if self.core_active and not is_core_active then self:blur() end
+  self.core_active = is_core_active
+
+  if self.native_focused and not is_core_active then self:blur() end
+
   if not node or node.active_view ~= self then
     pcall(self.browser.set_visible, self.browser, false)
   end
@@ -183,7 +206,7 @@ end
 
 function WebView:on_mouse_pressed(button)
   if button == "left" and self.browser then
-    self.browser:focus()
+    self:focus()
     return true
   end
   return false

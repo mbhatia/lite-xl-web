@@ -70,11 +70,31 @@
   self.webView.hidden = !visible;
 }
 
+- (BOOL)responderIsWebViewOrDescendant:(NSResponder *)responder {
+  if (!responder) return NO;
+  if (responder == self.webView) return YES;
+  if (![responder isKindOfClass:[NSView class]]) return NO;
+  NSView *view = (NSView *)responder;
+  return view == self.webView || [view isDescendantOf:self.webView];
+}
+
 - (void)focus {
   if (self.closed) return;
   [self attachIfNeeded];
   self.webView.hidden = NO;
   [self.webView.window makeFirstResponder:self.webView];
+}
+
+- (void)blur {
+  if (self.closed) return;
+  NSWindow *window = self.webView.window ?: self.hostView.window;
+  if (!window) return;
+  if (![self responderIsWebViewOrDescendant:window.firstResponder]) return;
+
+  NSView *fallback = self.hostView ?: window.contentView;
+  if (!fallback || fallback.window != window || ![window makeFirstResponder:fallback]) {
+    [window makeFirstResponder:nil];
+  }
 }
 
 - (void)closeView {
@@ -235,6 +255,12 @@ static int f_focus(lua_State *L) {
   return 0;
 }
 
+static int f_blur(lua_State *L) {
+  LxlEmbeddedWebView *view = get_view(L, 1);
+  on_main_sync(^{ [view blur]; });
+  return 0;
+}
+
 static int f_status(lua_State *L) {
   LxlEmbeddedWebView *view = get_view(L, 1);
   __block BOOL closed = NO;
@@ -279,6 +305,7 @@ static const luaL_Reg view_methods[] = {
   { "back", f_back },
   { "forward", f_forward },
   { "focus", f_focus },
+  { "blur", f_blur },
   { "status", f_status },
   { NULL, NULL }
 };
