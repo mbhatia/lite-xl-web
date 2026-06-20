@@ -50,5 +50,6 @@ add_custom_command(TARGET web_lxl POST_BUILD
 if(LXL_WEB_BUILD_TESTS AND UNIX)
   add_executable(test_dlopen tests/test_dlopen.c)
   target_link_libraries(test_dlopen PRIVATE ${CMAKE_DL_LIBS})
-  add_test(NAME native_module_load COMMAND test_dlopen "$<TARGET_FILE:web_lxl>")
+  add_test(NAME native_module_load
+    COMMAND test_dlopen "$<TARGET_FILE:web_lxl>" "${CMAKE_CURRENT_SOURCE_DIR}/plugins/web/init.lua")
 endif()

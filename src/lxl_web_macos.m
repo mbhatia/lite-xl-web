@@ -97,6 +97,13 @@
   }
 }
 
+- (void)detach {
+  if (self.closed) return;
+  [self blur];
+  self.webView.hidden = YES;
+  [self.webView removeFromSuperview];
+}
+
 - (void)closeView {
   if (self.closed) return;
   self.closed = YES;
@@ -261,6 +268,12 @@ static int f_blur(lua_State *L) {
   return 0;
 }
 
+static int f_detach(lua_State *L) {
+  LxlEmbeddedWebView *view = get_view(L, 1);
+  on_main_sync(^{ [view detach]; });
+  return 0;
+}
+
 static int f_status(lua_State *L) {
   LxlEmbeddedWebView *view = get_view(L, 1);
   __block BOOL closed = NO;
@@ -306,6 +319,7 @@ static const luaL_Reg view_methods[] = {
   { "forward", f_forward },
   { "focus", f_focus },
   { "blur", f_blur },
+  { "detach", f_detach },
   { "status", f_status },
   { NULL, NULL }
 };
@@ -324,7 +338,7 @@ static int open_module(lua_State *L) {
 
   lua_newtable(L);
   luaL_setfuncs(L, module_methods, 0);
-  lua_pushliteral(L, "0.1.2");
+  lua_pushliteral(L, "0.1.3");
   lua_setfield(L, -2, "version");
   lua_pushboolean(L, 1);
   lua_setfield(L, -2, "supported");

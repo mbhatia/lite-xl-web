@@ -118,6 +118,20 @@ function WebView:blur()
   self.native_focused = false
 end
 
+function WebView:detach()
+  if self.browser then
+    if self.browser.detach then
+      pcall(self.browser.detach, self.browser)
+    else
+      self:blur()
+      if self.browser.set_visible then
+        pcall(self.browser.set_visible, self.browser, false)
+      end
+    end
+  end
+  self.native_focused = false
+end
+
 function WebView:close()
   self:blur()
   if self.browser then
@@ -144,13 +158,13 @@ function WebView:update()
 
   local node = core.root_view.root_node:get_node_for_view(self)
   local is_core_active = core.active_view == self
-  if self.core_active and not is_core_active then self:blur() end
+  if self.core_active and not is_core_active then self:detach() end
   self.core_active = is_core_active
 
-  if self.native_focused and not is_core_active then self:blur() end
+  if self.native_focused and not is_core_active then self:detach() end
 
   if not node or node.active_view ~= self then
-    pcall(self.browser.set_visible, self.browser, false)
+    self:detach()
   end
 
   local ok_status, status = pcall(self.browser.status, self.browser)

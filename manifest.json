@@ -2,20 +2,20 @@
   "addons": [
     {
       "id": "web",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "mod_version": "3",
       "type": "plugin",
       "path": "plugins/web",
       "description": "Lite XL local HTML and web app preview using the system native webview.",
       "dependencies": {
         "web_lxl": {
-          "version": ">=0.1.2"
+          "version": ">=0.1.3"
         }
       }
     },
     {
       "id": "web_lxl",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "mod_version": "3",
       "type": "library",
       "path": "libraries/web_lxl",
@@ -23,26 +23,26 @@
       "files": [
         {
           "arch": "aarch64-darwin",
-          "url": "https://github.com/mbhatia/lite-xl-web/releases/download/v0.1.2/web_lxl.aarch64-darwin.lib",
-          "checksum": "daf6df225d0af74d71fa045bf8f77609affb01a15594cb28cdfe2ba2f7a30c58",
+          "url": "https://github.com/mbhatia/lite-xl-web/releases/download/v0.1.3/web_lxl.aarch64-darwin.lib",
+          "checksum": "SKIP",
           "path": "init.lib"
         },
         {
           "arch": "x86_64-darwin",
-          "url": "https://github.com/mbhatia/lite-xl-web/releases/download/v0.1.2/web_lxl.x86_64-darwin.lib",
-          "checksum": "e518d8f912ae9446b90ca970cbef01cd1721a7c4a085df144d86ed2300dc6130",
+          "url": "https://github.com/mbhatia/lite-xl-web/releases/download/v0.1.3/web_lxl.x86_64-darwin.lib",
+          "checksum": "SKIP",
           "path": "init.lib"
         },
         {
           "arch": "x86_64-linux",
-          "url": "https://github.com/mbhatia/lite-xl-web/releases/download/v0.1.2/web_lxl.x86_64-linux.so",
-          "checksum": "5fde3faa4529b3911ce97e2124f9c25a1055833254c65d458614ecc6726f1fa2",
+          "url": "https://github.com/mbhatia/lite-xl-web/releases/download/v0.1.3/web_lxl.x86_64-linux.so",
+          "checksum": "SKIP",
           "path": "init.so"
         },
         {
           "arch": "aarch64-linux",
-          "url": "https://github.com/mbhatia/lite-xl-web/releases/download/v0.1.2/web_lxl.aarch64-linux.so",
-          "checksum": "c402efe8ea0d756c55ab86e29bd44e37d9648536ad9bc5816a3b38cdb0896cba",
+          "url": "https://github.com/mbhatia/lite-xl-web/releases/download/v0.1.3/web_lxl.aarch64-linux.so",
+          "checksum": "SKIP",
           "path": "init.so"
         }
       ]
