@@ -1,0 +1,25 @@
+{
+  "addons": [
+    {
+      "id": "web",
+      "version": "0.1.0",
+      "mod_version": "3",
+      "type": "plugin",
+      "path": "plugins/web",
+      "description": "Lite XL local HTML and web app preview using the system native webview.",
+      "dependencies": {
+        "web_lxl": {
+          "version": ">=0.1.0"
+        }
+      }
+    },
+    {
+      "id": "web_lxl",
+      "version": "0.1.0",
+      "mod_version": "3",
+      "type": "library",
+      "path": "libraries/web_lxl",
+      "description": "Native system webview bridge for lite-xl-web."
+    }
+  ]
+}

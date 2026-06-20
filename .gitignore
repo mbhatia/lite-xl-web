@@ -1,0 +1,5 @@
+/build/
+.DS_Store
+libraries/web_lxl/init.lib
+libraries/web_lxl/init.so
+libraries/web_lxl/init.dylib
