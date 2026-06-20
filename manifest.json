@@ -2,20 +2,20 @@
   "addons": [
     {
       "id": "web",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "mod_version": "3",
       "type": "plugin",
       "path": "plugins/web",
       "description": "Lite XL local HTML and web app preview using the system native webview.",
       "dependencies": {
         "web_lxl": {
-          "version": ">=0.1.3"
+          "version": ">=0.1.4"
         }
       }
     },
     {
       "id": "web_lxl",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "mod_version": "3",
       "type": "library",
       "path": "libraries/web_lxl",
@@ -23,25 +23,25 @@
       "files": [
         {
           "arch": "aarch64-darwin",
-          "url": "https://github.com/mbhatia/lite-xl-web/releases/download/v0.1.3/web_lxl.aarch64-darwin.lib",
+          "url": "https://github.com/mbhatia/lite-xl-web/releases/download/v0.1.4/web_lxl.aarch64-darwin.lib",
           "checksum": "SKIP",
           "path": "init.lib"
         },
         {
           "arch": "x86_64-darwin",
-          "url": "https://github.com/mbhatia/lite-xl-web/releases/download/v0.1.3/web_lxl.x86_64-darwin.lib",
+          "url": "https://github.com/mbhatia/lite-xl-web/releases/download/v0.1.4/web_lxl.x86_64-darwin.lib",
           "checksum": "SKIP",
           "path": "init.lib"
         },
         {
           "arch": "x86_64-linux",
-          "url": "https://github.com/mbhatia/lite-xl-web/releases/download/v0.1.3/web_lxl.x86_64-linux.so",
+          "url": "https://github.com/mbhatia/lite-xl-web/releases/download/v0.1.4/web_lxl.x86_64-linux.so",
           "checksum": "SKIP",
           "path": "init.so"
         },
         {
           "arch": "aarch64-linux",
-          "url": "https://github.com/mbhatia/lite-xl-web/releases/download/v0.1.3/web_lxl.aarch64-linux.so",
+          "url": "https://github.com/mbhatia/lite-xl-web/releases/download/v0.1.4/web_lxl.aarch64-linux.so",
           "checksum": "SKIP",
           "path": "init.so"
         }

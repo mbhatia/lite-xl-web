@@ -75,8 +75,8 @@ static int require_file_contains(const char *path, const char *needle) {
 }
 
 int main(int argc, char **argv) {
-  if (argc != 3) {
-    fprintf(stderr, "usage: %s MODULE LUA_PLUGIN\n", argv[0]);
+  if (argc != 4) {
+    fprintf(stderr, "usage: %s MODULE LUA_PLUGIN EXPECT_NATIVE_DETACH\n", argv[0]);
     return 2;
   }
 
@@ -95,7 +95,7 @@ int main(int argc, char **argv) {
 
   dlclose(handle);
 
-  if (require_file_contains(argv[1], "detach")) return 1;
+  if (strcmp(argv[3], "1") == 0 && require_file_contains(argv[1], "detach")) return 1;
   if (require_file_contains(argv[2], "function WebView:detach")) return 1;
 
   return 0;
