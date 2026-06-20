@@ -24,25 +24,25 @@
         {
           "arch": "aarch64-darwin",
           "url": "https://github.com/mbhatia/lite-xl-web/releases/download/v0.1.1/web_lxl.aarch64-darwin.lib",
-          "checksum": "SKIP",
+          "checksum": "04c335f661f8b40a9082ae951a4013abf71233c31f813ef62958a022015036dd",
           "path": "init.lib"
         },
         {
           "arch": "x86_64-darwin",
           "url": "https://github.com/mbhatia/lite-xl-web/releases/download/v0.1.1/web_lxl.x86_64-darwin.lib",
-          "checksum": "SKIP",
+          "checksum": "616c5f4b61edf3260db9716b03bf3f7a2dc93beb1822484951d829b5f02541df",
           "path": "init.lib"
         },
         {
           "arch": "x86_64-linux",
           "url": "https://github.com/mbhatia/lite-xl-web/releases/download/v0.1.1/web_lxl.x86_64-linux.so",
-          "checksum": "SKIP",
+          "checksum": "8526ad48eebb1fdb3de4706787dd507ae9c053aaf58ef5073aa63a5f1594a7e6",
           "path": "init.so"
         },
         {
           "arch": "aarch64-linux",
           "url": "https://github.com/mbhatia/lite-xl-web/releases/download/v0.1.1/web_lxl.aarch64-linux.so",
-          "checksum": "SKIP",
+          "checksum": "e29c791bd97bdbca66c0b68736b81062513cbc8bb2e71fc5b164afb6a78ba137",
           "path": "init.so"
         }
       ]
