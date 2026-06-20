@@ -19,7 +19,21 @@
       "mod_version": "3",
       "type": "library",
       "path": "libraries/web_lxl",
-      "description": "Native system webview bridge for lite-xl-web."
+      "description": "Native system webview bridge for lite-xl-web.",
+      "files": [
+        {
+          "arch": "aarch64-darwin",
+          "url": "https://github.com/mbhatia/lite-xl-web/releases/download/v0.1.0/web_lxl.aarch64-darwin.lib",
+          "checksum": "SKIP",
+          "path": "init.lib"
+        },
+        {
+          "arch": "x86_64-darwin",
+          "url": "https://github.com/mbhatia/lite-xl-web/releases/download/v0.1.0/web_lxl.x86_64-darwin.lib",
+          "checksum": "SKIP",
+          "path": "init.lib"
+        }
+      ]
     }
   ]
 }
