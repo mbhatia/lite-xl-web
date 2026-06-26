@@ -3,3 +3,8 @@
 libraries/web_lxl/init.lib
 libraries/web_lxl/init.so
 libraries/web_lxl/init.dylib
+# Lite-xl config/session info; generated when testing with LITE_USERDIR="$PWD"
+init.lua
+session.lua
+user_settings.lua
+ws/
