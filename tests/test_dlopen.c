@@ -96,7 +96,9 @@ int main(int argc, char **argv) {
   dlclose(handle);
 
   if (strcmp(argv[3], "1") == 0 && require_file_contains(argv[1], "detach")) return 1;
+  if (strcmp(argv[3], "1") == 0 && require_file_contains(argv[1], "set_scale")) return 1;
   if (require_file_contains(argv[2], "function WebView:detach")) return 1;
+  if (require_file_contains(argv[2], "function WebView:on_scale_change")) return 1;
 
   return 0;
 }

@@ -12,11 +12,12 @@
 @property(nonatomic, weak) NSView *hostView;
 @property(nonatomic, copy) NSString *lastURL;
 @property(nonatomic, copy) NSString *lastTitle;
+@property(nonatomic, assign) CGFloat uiScale;
 @property(nonatomic, assign) BOOL closed;
 @end
 
 @implementation LxlEmbeddedWebView
-- (instancetype)init {
+- (instancetype)initWithScale:(CGFloat)scale {
   self = [super init];
   if (!self) return nil;
   WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
@@ -24,7 +25,9 @@
   self.webView.navigationDelegate = self;
   self.webView.autoresizingMask = NSViewNotSizable;
   self.webView.hidden = YES;
+  self.uiScale = MAX(scale, 0.2);
   self.closed = NO;
+  [self applyScale];
   return self;
 }
 
@@ -124,6 +127,21 @@
   }
 }
 
+- (void)setUIScale:(CGFloat)scale {
+  if (self.closed) return;
+  self.uiScale = MAX(scale, 0.2);
+  [self applyScale];
+}
+
+- (void)applyScale {
+  if (!self.webView) return;
+  if (@available(macOS 11.0, *)) {
+    self.webView.pageZoom = self.uiScale;
+  } else {
+    self.webView.magnification = self.uiScale;
+  }
+}
+
 - (void)reload {
   if (!self.closed) [self.webView reload:nil];
 }
@@ -145,6 +163,7 @@
   (void)navigation;
   self.lastURL = webView.URL.absoluteString;
   self.lastTitle = webView.title;
+  [self applyScale];
 }
 @end
 
@@ -198,11 +217,14 @@ static int f_new(lua_State *L) {
   lua_getfield(L, 1, "url");
   NSString *url = lua_string(L, -1, "about:blank");
   lua_pop(L, 1);
+  lua_getfield(L, 1, "scale");
+  CGFloat scale = lua_isnumber(L, -1) ? (CGFloat)lua_tonumber(L, -1) : 1.0;
+  lua_pop(L, 1);
 
   __block LxlEmbeddedWebView *view = nil;
   on_main_sync(^{
     [NSApplication sharedApplication];
-    view = [[LxlEmbeddedWebView alloc] init];
+    view = [[LxlEmbeddedWebView alloc] initWithScale:scale];
     [view loadURLString:url];
   });
 
@@ -228,6 +250,13 @@ static int f_set_rect(lua_State *L) {
   CGFloat height = (CGFloat)luaL_checknumber(L, 5);
   BOOL visible = lua_isnoneornil(L, 6) ? YES : lua_toboolean(L, 6);
   on_main_sync(^{ [view setLiteX:x y:y width:width height:height visible:visible]; });
+  return 0;
+}
+
+static int f_set_scale(lua_State *L) {
+  LxlEmbeddedWebView *view = get_view(L, 1);
+  CGFloat scale = (CGFloat)luaL_checknumber(L, 2);
+  on_main_sync(^{ [view setUIScale:scale]; });
   return 0;
 }
 
@@ -313,6 +342,7 @@ static const luaL_Reg view_methods[] = {
   { "close", f_close },
   { "load_url", f_load_url },
   { "set_rect", f_set_rect },
+  { "set_scale", f_set_scale },
   { "set_visible", f_set_visible },
   { "reload", f_reload },
   { "back", f_back },
@@ -338,7 +368,7 @@ static int open_module(lua_State *L) {
 
   lua_newtable(L);
   luaL_setfuncs(L, module_methods, 0);
-  lua_pushliteral(L, "0.1.4");
+  lua_pushliteral(L, "0.1.5");
   lua_setfield(L, -2, "version");
   lua_pushboolean(L, 1);
   lua_setfield(L, -2, "supported");

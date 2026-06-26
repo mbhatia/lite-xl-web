@@ -28,6 +28,10 @@ if not ok then native = nil end
 
 local WebView = View:extend()
 
+local function current_ui_scale()
+  return tonumber(SCALE) or 1
+end
+
 local function is_url(text)
   return type(text) == "string" and text:match("^%a[%w+.-]*://") ~= nil
 end
@@ -90,6 +94,7 @@ function WebView:new(target, options)
     local ok_new, browser_or_error = pcall(native.new, {
       url = self.url,
       title = self.title,
+      scale = current_ui_scale(),
     })
     if ok_new then
       self.browser = browser_or_error
@@ -98,6 +103,21 @@ function WebView:new(target, options)
       core.error("web: %s", self.error)
     end
   end
+end
+
+function WebView:sync_scale(scale)
+  if self.browser and self.browser.set_scale then
+    local ok_scale, err = pcall(self.browser.set_scale, self.browser, scale or current_ui_scale())
+    if not ok_scale then
+      self.error = tostring(err)
+      self.browser = nil
+      core.redraw = true
+    end
+  end
+end
+
+function WebView:on_scale_change(new_scale)
+  self:sync_scale(new_scale)
 end
 
 function WebView:get_name()
